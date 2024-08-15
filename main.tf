@@ -1,20 +1,29 @@
-provider "aws" {
-  region     = "us-east-2"
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
-}
+data "aws_ami" "ubuntu" {
+    most_recent = true
 
-resource "aws_s3_bucket" "example" {
-  bucket = "my-terraform-example-bucket"
-  acl    = "private"
-}
-
-terraform {
-  backend "remote" {
-    organization = "terraform-github-actions-organization"
-
-    workspaces {
-      name = "terraform-github-actions"
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/*20.04-amd64-server-*"]
     }
+
+    filter {
+        name   = "virtualization-type"
+        values = ["hvm"]
+    }
+    
+    owners = ["099720109477"] # Canonical
+}
+
+provider "aws" {
+  region  = "us-east-2"
+}
+
+resource "aws_instance" "app_server" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t3.micro"
+  key_name      = "app-ssh-key"
+
+  tags = {
+    Name = var.ec2_name
   }
 }
