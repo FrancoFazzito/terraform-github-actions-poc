@@ -1,6 +1,6 @@
 name: 'Terraform'
 on:
-  push:  # Esto ejecutará el workflow en cada push a cualquier rama
+  push:
     branches:
       - '**'  # Se ejecutará en cualquier rama
 
@@ -26,6 +26,9 @@ jobs:
         run: terraform apply -auto-approve
 
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      TF_TOKEN_app.terraform.io: ${{ secrets.TF_API_TOKEN }}  # Usamos TF_TOKEN_app.terraform.io para el token API
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}               # Proporciona aws_access_key desde GitHub Secrets
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}       # Proporciona aws_secret_key desde GitHub Secrets
+      TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}           # Mapear la variable de entorno a la variable de Terraform
+      TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}       # Mapear la variable de entorno a la variable de Terraform
+      TF_TOKEN_app.terraform.io: ${{ secrets.TF_API_TOKEN }}            # Proporciona el token API desde GitHub Secrets
+
