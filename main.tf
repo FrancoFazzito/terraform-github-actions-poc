@@ -16,5 +16,7 @@ terraform {
     workspaces {
       name = "terraform-github-actions"
     }
+
+    token = var.terraform_api_token
   }
 }
