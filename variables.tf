@@ -1,6 +1,10 @@
-variable "aws_access_key" {}
+variable "aws_access_key" {
+  type = string
+}
 
-variable "aws_secret_key" {}
+variable "aws_secret_key" {
+  type = string
+}
 
 variable "terraform_api_token" {
   type      = string
